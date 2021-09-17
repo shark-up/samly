@@ -100,14 +100,17 @@ defmodule Samly.SpData do
 
   @spec load_key(%SpData{}, map()) :: %SpData{}
   defp load_key(%SpData{key: key} = sp_data, _) when is_tuple(key) do
+    IO.inspect("load key with tuple key")
     %SpData{sp_data | key: key}
   end
 
   defp load_key(%SpData{keyfile: ""} = sp_data, _) do
+    IO.inspect("load undefined key")
     %SpData{sp_data | key: :undefined}
   end
 
   defp load_key(%SpData{keyfile: keyfile} = sp_data, %{} = opts_map) do
+    IO.inspect("load key from keyfile")
     try do
       key = :esaml_util.load_private_key(keyfile)
       %SpData{sp_data | key: key}
