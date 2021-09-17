@@ -99,6 +99,10 @@ defmodule Samly.SpData do
   end
 
   @spec load_key(%SpData{}, map()) :: %SpData{}
+  defp load_key(%SpData{key: key} = sp_data, _) when is_tuple(key) do
+    %SpData{sp_data | key: key}
+  end
+
   defp load_key(%SpData{keyfile: ""} = sp_data, _) do
     %SpData{sp_data | key: :undefined}
   end
