@@ -111,6 +111,7 @@ defmodule Samly.SpData do
 
   defp load_key(%SpData{keyfile: keyfile} = sp_data, %{} = opts_map) do
     IO.inspect("load key from keyfile")
+    IO.inspect(sp_data)
     try do
       key = :esaml_util.load_private_key(keyfile)
       %SpData{sp_data | key: key}
