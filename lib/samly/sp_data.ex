@@ -52,6 +52,10 @@ defmodule Samly.SpData do
 
   @spec load_provider(map) :: %SpData{} | no_return
   def load_provider(%{} = opts_map) do
+    IO.inspect("load_provider")
+    IO.inspect(opts_map)
+    IO.inspect("---")
+
     sp_data = %__MODULE__{
       id: Map.get(opts_map, :id, ""),
       entity_id: Map.get(opts_map, :entity_id, ""),
@@ -61,7 +65,8 @@ defmodule Samly.SpData do
       contact_email: Map.get(opts_map, :contact_email, @default_contact_email),
       org_name: Map.get(opts_map, :org_name, @default_org_name),
       org_displayname: Map.get(opts_map, :org_displayname, @default_org_displayname),
-      org_url: Map.get(opts_map, :org_url, @default_org_url)
+      org_url: Map.get(opts_map, :org_url, @default_org_url),
+      key: Map.get(opts_map, :key, :undefined)
     }
 
     sp_data |> set_id(opts_map) |> load_cert(opts_map) |> load_key(opts_map)
@@ -112,6 +117,7 @@ defmodule Samly.SpData do
   defp load_key(%SpData{keyfile: keyfile} = sp_data, %{} = opts_map) do
     IO.inspect("load key from keyfile")
     IO.inspect(sp_data)
+
     try do
       key = :esaml_util.load_private_key(keyfile)
       %SpData{sp_data | key: key}
