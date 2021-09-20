@@ -48,7 +48,6 @@ defmodule Samly.SpData do
     |> Enum.filter(fn sp_data -> sp_data.valid? end)
     |> Enum.map(fn sp_data -> {sp_data.id, sp_data} end)
     |> Enum.into(%{})
-    |> IO.inspect()
   end
 
   @spec load_provider(map) :: %SpData{} | no_return
@@ -102,7 +101,6 @@ defmodule Samly.SpData do
 
   @spec load_key(%SpData{}, map()) :: %SpData{}
   defp load_key(%SpData{key: key} = sp_data, _) when is_tuple(key) do
-    IO.inspect("load key with tuple key")
     %SpData{sp_data | key: key}
   end
 
@@ -111,8 +109,6 @@ defmodule Samly.SpData do
   end
 
   defp load_key(%SpData{keyfile: keyfile} = sp_data, %{} = opts_map) do
-    IO.inspect("standard loading key from keyfile")
-
     try do
       key = :esaml_util.load_private_key(keyfile)
       %SpData{sp_data | key: key}
