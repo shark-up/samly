@@ -81,13 +81,18 @@ defmodule Samly.SpData do
   end
 
   @spec load_cert(%SpData{}, map()) :: %SpData{}
+  defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) do
+    cert_value = cert || :undefined
+    %SpData{sp_data | cert: cert_value |> IO.inspect()}
+  end
+
   defp load_cert(%SpData{certfile: ""} = sp_data, _) do
     %SpData{sp_data | cert: :undefined}
   end
 
   defp load_cert(%SpData{certfile: certfile} = sp_data, %{} = opts_map) do
     try do
-      cert = :esaml_util.load_certificate(certfile)
+      cert = :esaml_util.load_certificate(certfile) |> IO.inspect()
       %SpData{sp_data | cert: cert}
     rescue
       _error ->
