@@ -81,7 +81,9 @@ defmodule Samly.SpData do
   end
 
   @spec load_cert(%SpData{}, map()) :: %SpData{}
-  defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) do
+  defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) when is_binary(cert) do
+    IO.inspect("load_cert with binary 'cert'")
+    IO.inspect(cert)
     cert_value = cert || :undefined
     %SpData{sp_data | cert: cert_value |> IO.inspect()}
   end
