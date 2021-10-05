@@ -80,6 +80,7 @@ defmodule Samly.SpData do
     end
   end
 
+  @spec load_cert(%SpData{}, map()) :: %SpData{}
   defp load_cert(%SpData{certfile: ""} = sp_data, _) do
     %SpData{sp_data | cert: :undefined}
   end
