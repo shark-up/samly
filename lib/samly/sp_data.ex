@@ -80,13 +80,6 @@ defmodule Samly.SpData do
     end
   end
 
-  defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) when is_binary(cert) do
-    IO.inspect("load_cert with binary 'cert'")
-    IO.inspect(cert)
-    cert_value = cert || :undefined
-    %SpData{sp_data | cert: cert_value |> IO.inspect()}
-  end
-
   defp load_cert(%SpData{certfile: ""} = sp_data, _) do
     %SpData{sp_data | cert: :undefined}
   end
@@ -96,7 +89,7 @@ defmodule Samly.SpData do
     IO.inspect("sp_data")
     IO.inspect(sp_data)
     try do
-      cert = :esaml_util.load_certificate(certfile)
+      cert = if sp_data.cert !== :undefined, do: sp_data.cert, else: :esaml_util.load_certificate(certfile)
       IO.inspect(cert)
       %SpData{sp_data | cert: cert}
     rescue
