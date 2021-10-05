@@ -62,7 +62,8 @@ defmodule Samly.SpData do
       org_name: Map.get(opts_map, :org_name, @default_org_name),
       org_displayname: Map.get(opts_map, :org_displayname, @default_org_displayname),
       org_url: Map.get(opts_map, :org_url, @default_org_url),
-      key: Map.get(opts_map, :key, :undefined)
+      key: Map.get(opts_map, :key, :undefined),
+      cert: Map.get(opts_map, :cert, :undefined),
     }
 
     sp_data |> set_id(opts_map) |> load_cert(opts_map) |> load_key(opts_map)
@@ -81,7 +82,14 @@ defmodule Samly.SpData do
   end
 
   @spec load_cert(%SpData{}, map()) :: %SpData{}
+  defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) when is_binary(cert) do
+    IO.inspect("load samly with binary cert")
+    IO.inspect(cert)
+    %SpData{sp_data | cert: cert}
+  end
+
   defp load_cert(%SpData{certfile: ""} = sp_data, _) do
+    IO.inspect("load samly with empty string certfile -> :undefined")
     %SpData{sp_data | cert: :undefined}
   end
 
