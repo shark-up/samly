@@ -93,9 +93,10 @@ defmodule Samly.SpData do
   end
 
   defp load_cert(%SpData{certfile: certfile} = sp_data, %{} = opts_map) do
+    IO.inspect("load_cert, cert ->")
+    IO.inspect("sp_data")
     try do
       cert = :esaml_util.load_certificate(certfile)
-      IO.inspect("load_cert, cert ->")
       IO.inspect(cert)
       %SpData{sp_data | cert: cert}
     rescue
