@@ -80,7 +80,6 @@ defmodule Samly.SpData do
     end
   end
 
-  @spec load_cert(%SpData{}, map()) :: %SpData{}
   defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) when is_binary(cert) do
     IO.inspect("load_cert with binary 'cert'")
     IO.inspect(cert)
@@ -95,6 +94,7 @@ defmodule Samly.SpData do
   defp load_cert(%SpData{certfile: certfile} = sp_data, %{} = opts_map) do
     IO.inspect("load_cert, cert ->")
     IO.inspect("sp_data")
+    IO.inspect(sp_data)
     try do
       cert = :esaml_util.load_certificate(certfile)
       IO.inspect(cert)
