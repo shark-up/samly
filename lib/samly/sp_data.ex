@@ -83,27 +83,21 @@ defmodule Samly.SpData do
 
   @spec load_cert(%SpData{}, map()) :: %SpData{}
   defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) when is_binary(cert) do
-    IO.inspect("load samly with binary cert")
-    IO.inspect(cert)
-    %SpData{sp_data | cert: cert} |> IO.inspect()
+    %SpData{sp_data | cert: cert}
   end
 
   defp load_cert(%SpData{certfile: ""} = sp_data, _) do
-    IO.inspect("load samly with empty string certfile -> :undefined")
     %SpData{sp_data | cert: :undefined}
   end
 
   defp load_cert(%SpData{certfile: certfile} = sp_data, %{} = opts_map) do
-    IO.inspect("load_cert, cert ->")
-
     try do
       cert =
         if sp_data.cert !== :undefined,
           do: sp_data.cert,
           else: :esaml_util.load_certificate(certfile)
 
-      IO.inspect(cert)
-      %SpData{sp_data | cert: cert} |> IO.inspect()
+      %SpData{sp_data | cert: cert}
     rescue
       _error ->
         Logger.error(
