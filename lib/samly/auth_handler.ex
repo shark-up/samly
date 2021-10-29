@@ -92,7 +92,7 @@ defmodule Samly.AuthHandler do
     #     conn |> send_resp(500, "request_failed")
   end
 
-  def send_signout_req(conn, forced_redirect_req \\ nil) do
+  def send_signout_req(conn, forced_use_redirect_for_req \\ nil) do
     Logger.info("send_signout_req")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
@@ -119,8 +119,7 @@ defmodule Samly.AuthHandler do
         |> delete_session("samly_assertion_key")
         |> send_saml_request(
           idp_signout_url,
-          forced_redirect_req || idp.use_redirect_for_req,
-          true,
+          forced_use_redirect_for_req || idp.use_redirect_for_req,
           req_xml_frag,
           relay_state
         )
