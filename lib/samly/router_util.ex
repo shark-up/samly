@@ -105,7 +105,7 @@ defmodule Samly.RouterUtil do
       conn
       |> Conn.put_resp_header("content-type", "text/html")
       |> Conn.put_private(:relay_state, relay_state)
-      |> Conn.put_private(:signed_xml_payload, "signed_xml_payload")
+      |> Conn.put_private(:signed_xml_payload, signed_xml_payload)
       |> Conn.send_resp(200, resp_body)
     end
   end
