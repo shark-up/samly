@@ -53,7 +53,6 @@ defmodule Samly.AuthHandler do
     ]
 
     Logger.info(inspect(opts))
-    Logger.info(inspect(@sso_init_resp_template))
     Logger.info("---")
 
     conn
