@@ -95,12 +95,12 @@ defmodule Samly.RouterUtil do
       Logger.info("Dest")
       Logger.info(inspect(idp_url))
       Logger.info("signed_xml_payload")
-      Logger.info(inspect(signed_xml_payload))
+      Logger.info(:base64.encode(:lists.flatten(:xmerl.export([signed_xml_payload], :xmerl_xml))))
       Logger.info("relay_state")
       Logger.info(inspect(relay_state))
       Logger.info("Type")
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
-      IO.inspect(resp_body |> String.split("SAMLRequest \" value=\"") |> List.first() |> String.split("\"") |> List.first())
+      IO.inspect(resp_body |> String.split("form") |> List.last())
 
       conn
       |> Conn.put_resp_header("content-type", "text/html")
