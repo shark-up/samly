@@ -61,7 +61,9 @@ defmodule Samly.SpData do
       contact_email: Map.get(opts_map, :contact_email, @default_contact_email),
       org_name: Map.get(opts_map, :org_name, @default_org_name),
       org_displayname: Map.get(opts_map, :org_displayname, @default_org_displayname),
-      org_url: Map.get(opts_map, :org_url, @default_org_url)
+      org_url: Map.get(opts_map, :org_url, @default_org_url),
+      key: Map.get(opts_map, :key, :undefined),
+      cert: Map.get(opts_map, :cert, :undefined)
     }
 
     sp_data |> set_id(opts_map) |> load_cert(opts_map) |> load_key(opts_map)
@@ -80,13 +82,21 @@ defmodule Samly.SpData do
   end
 
   @spec load_cert(%SpData{}, map()) :: %SpData{}
+  defp load_cert(%SpData{cert: cert, certfile: ""} = sp_data, _) when is_binary(cert) do
+    %SpData{sp_data | cert: cert}
+  end
+
   defp load_cert(%SpData{certfile: ""} = sp_data, _) do
     %SpData{sp_data | cert: :undefined}
   end
 
   defp load_cert(%SpData{certfile: certfile} = sp_data, %{} = opts_map) do
     try do
-      cert = :esaml_util.load_certificate(certfile)
+      cert =
+        if sp_data.cert !== :undefined,
+          do: sp_data.cert,
+          else: :esaml_util.load_certificate(certfile)
+
       %SpData{sp_data | cert: cert}
     rescue
       _error ->
@@ -99,6 +109,10 @@ defmodule Samly.SpData do
   end
 
   @spec load_key(%SpData{}, map()) :: %SpData{}
+  defp load_key(%SpData{key: key} = sp_data, _) when is_tuple(key) do
+    %SpData{sp_data | key: key}
+  end
+
   defp load_key(%SpData{keyfile: ""} = sp_data, _) do
     %SpData{sp_data | key: :undefined}
   end
