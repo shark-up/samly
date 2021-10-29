@@ -43,14 +43,12 @@ defmodule Samly.AuthHandler do
 
     target_url = conn.private[:samly_target_url] || "/"
 
-    opts =
-      [
-        nonce: conn.private[:samly_nonce],
-        action: URI.encode(conn.request_path),
-        target_url: URI.encode_www_form(target_url),
-        csrf_token: get_csrf_token()
-      ]
-      |> IO.inspect()
+    opts = [
+      nonce: conn.private[:samly_nonce],
+      action: URI.encode(conn.request_path),
+      target_url: URI.encode_www_form(target_url),
+      csrf_token: get_csrf_token()
+    ]
 
     conn
     |> put_resp_header("content-type", "text/html")
