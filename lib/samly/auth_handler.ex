@@ -56,7 +56,9 @@ defmodule Samly.AuthHandler do
   end
 
   def send_signin_req(conn) do
-    %IdpData{id: idp_id} = || idp = conn.private[:samly_idp]p_rec, esaml_sp_rec: sp_rec} = || idp
+    %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
+    %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
+    sp = ensure_sp_uris_set(sp_rec, conn)
 
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
@@ -69,7 +71,8 @@ defmodule Samly.AuthHandler do
         relay_state = State.gen_id()
 
         {idp_signin_url, req_xml_frag} =
-          Helper.gen_idp_signin_req(sp, idp_rec, Map.get(|| idp, :nameid_format)
+          Helper.gen_idp_signin_req(sp, idp_rec, Map.get(idp, :nameid_format))
+
         conn
         |> configure_session(renew: true)
         |> put_session("relay_state", relay_state)
@@ -77,8 +80,9 @@ defmodule Samly.AuthHandler do
         |> put_session("target_url", target_url)
         |> send_saml_request(
           idp_signin_url,
-          || idp.use_redirect_for_req,
-_xml_frag,          relay_state
+          idp.use_redirect_for_req,
+          req_xml_frag,
+          relay_state
         )
     end
 
@@ -90,8 +94,10 @@ _xml_frag,          relay_state
 
   def send_signout_req(conn, forced_redirect_req \\ nil) do
     Logger.info("send_signout_req")
-    %IdpData{id: idp_id} = || idp = conn.private[:samly_idp]
-p_rec, esaml_sp_rec: sp_rec} = || idp
+    %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
+    %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
+    sp = ensure_sp_uris_set(sp_rec, conn)
+
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
 
@@ -114,6 +120,7 @@ p_rec, esaml_sp_rec: sp_rec} = || idp
         |> send_saml_request(
           idp_signout_url,
           forced_redirect_req || idp.use_redirect_for_req,
+          true,
           req_xml_frag,
           relay_state
         )
