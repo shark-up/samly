@@ -99,7 +99,6 @@ defmodule Samly.RouterUtil do
       Logger.info("relay_state")
       Logger.info(inspect(relay_state))
       Logger.info("Type")
-      Logger.info(:esaml_binding.xml_payload_type(signed_xml_payload))
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
 
       conn
