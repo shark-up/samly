@@ -38,9 +38,12 @@ defmodule Samly.AuthHandler do
   """
 
   def initiate_sso_req(conn) do
+    Logger.info("initiate_sso_req")
     import Plug.CSRFProtection, only: [get_csrf_token: 0]
 
     target_url = conn.private[:samly_target_url] || "/"
+
+    Logger.info(inspect(target_url))
 
     opts = [
       nonce: conn.private[:samly_nonce],
@@ -48,6 +51,10 @@ defmodule Samly.AuthHandler do
       target_url: URI.encode_www_form(target_url),
       csrf_token: get_csrf_token()
     ]
+
+    Logger.info(inspect(opts))
+    Logger.info(inspect(@sso_init_resp_template))
+    Logger.info("---")
 
     conn
     |> put_resp_header("content-type", "text/html")
@@ -92,9 +99,13 @@ defmodule Samly.AuthHandler do
   end
 
   def send_signout_req(conn) do
+    Logger.info("send_signout_req")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
+    Logger.info(inspect(idp_rec))
+    Logger.info(inspect(sp_rec))
     sp = ensure_sp_uris_set(sp_rec, conn)
+    Logger.info(inspect(sp))
 
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
