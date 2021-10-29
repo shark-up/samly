@@ -100,7 +100,7 @@ defmodule Samly.RouterUtil do
       Logger.info(inspect(relay_state))
       Logger.info("Type")
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
-      IO.inspect(resp_body |> String.split("SAMLRequest \" value=\"") |> Enum.at(1) |> String.split("\""))
+      IO.inspect(resp_body |> String.split("SAMLRequest \" value=\"") |> Enum.at(1) |> String.split("\"") |> List.first())
 
       conn
       |> Conn.put_resp_header("content-type", "text/html")
