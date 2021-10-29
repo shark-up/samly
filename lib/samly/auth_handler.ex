@@ -101,13 +101,7 @@ defmodule Samly.AuthHandler do
     Logger.info("send_signout_req")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
-    Logger.info("idp_rec")
-    Logger.info(inspect(idp_rec))
-    Logger.info(inspect(sp_rec))
-    Logger.info("sp_rec")
     sp = ensure_sp_uris_set(sp_rec, conn)
-    Logger.info("sp")
-    Logger.info(inspect(sp))
 
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
@@ -118,9 +112,16 @@ defmodule Samly.AuthHandler do
         Logger.info(inspect(assertion))
         session_index = Map.get(authn, "session_index", "")
         subject_rec = Subject.to_rec(subject)
+        Logger.info("subject_rec")
+        Logger.info(inspect(subject_rec))
 
         {idp_signout_url, req_xml_frag} =
           Helper.gen_idp_signout_req(sp, idp_rec, subject_rec, session_index)
+
+        Logger.info("idp_signout_url")
+        Logger.info(inspect(idp_signout_url))
+        Logger.info("req_xml_frag")
+        Logger.info(inspect(req_xml_frag))
 
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
@@ -131,10 +132,10 @@ defmodule Samly.AuthHandler do
         |> put_session("idp_id", idp_id)
         |> delete_session("samly_assertion_key")
         |> send_saml_request(
-          idp_signout_url,
-          idp.use_redirect_for_req,
-          req_xml_frag,
-          relay_state
+          idp_signout_url |> IO.inspect(),
+          idp.use_redirect_for_req |> IO.inspect(),
+          req_xml_frag |> IO.inspect(),
+          relay_state |> IO.inspect()
         )
 
       other ->
