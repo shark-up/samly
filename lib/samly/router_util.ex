@@ -93,7 +93,7 @@ defmodule Samly.RouterUtil do
     else
       nonce = conn.private[:samly_nonce]
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
-      IO.inspect(resp_body)
+      Logger.info(inspect(resp_body))
 
       conn
       |> Conn.put_resp_header("content-type", "text/html")
