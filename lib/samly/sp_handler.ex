@@ -123,9 +123,6 @@ defmodule Samly.SPHandler do
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: _idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
-    Logger.info(idp_id)
-    Logger.info(inspect(idp))
-    Logger.info(inspect(sp))
 
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]

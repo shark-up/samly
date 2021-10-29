@@ -43,17 +43,14 @@ defmodule Samly.AuthHandler do
 
     target_url = conn.private[:samly_target_url] || "/"
 
-    Logger.info(inspect(target_url))
-
-    opts = [
-      nonce: conn.private[:samly_nonce],
-      action: URI.encode(conn.request_path),
-      target_url: URI.encode_www_form(target_url),
-      csrf_token: get_csrf_token()
-    ]
-
-    Logger.info(inspect(opts))
-    Logger.info("---")
+    opts =
+      [
+        nonce: conn.private[:samly_nonce],
+        action: URI.encode(conn.request_path),
+        target_url: URI.encode_www_form(target_url),
+        csrf_token: get_csrf_token()
+      ]
+      |> IO.inspect()
 
     conn
     |> put_resp_header("content-type", "text/html")
@@ -130,8 +127,6 @@ defmodule Samly.AuthHandler do
         )
 
       other ->
-        Logger.error("error in get_assertion")
-        Logger.error(inspect(other))
         conn |> send_resp(403, "access_denied")
     end
 
