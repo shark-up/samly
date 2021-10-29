@@ -92,8 +92,11 @@ defmodule Samly.RouterUtil do
       conn |> redirect(302, url)
     else
       nonce = conn.private[:samly_nonce]
+      Logger.info(inspect(idp_url))
+      Logger.info(inspect(signed_xml_payload))
+      Logger.info(inspect(relay_state))
+      Logger.info(inspect(nonce))
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
-      Logger.info(inspect(resp_body))
 
       conn
       |> Conn.put_resp_header("content-type", "text/html")
