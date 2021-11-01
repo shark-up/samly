@@ -157,18 +157,8 @@ defmodule Samly.IdpData do
 
   @spec update_esaml_recs(%IdpData{}, %{required(id()) => %SpData{}}, map()) :: %IdpData{}
   defp update_esaml_recs(idp_data, service_providers, opts_map) do
-    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
-      IO.inspect(idp_data)
-      IO.inspect(opts_map)
-      Logger.info("---")
-    end
     case Map.get(service_providers, idp_data.sp_id) do
       %SpData{} = sp ->
-        if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
-          Logger.info("esaml_idp_rec")
-          IO.inspect(to_esaml_idp_metadata(idp_data, opts_map))
-          Logger.info("---")
-        end
         idp_data = %IdpData{idp_data | esaml_idp_rec: to_esaml_idp_metadata(idp_data, opts_map)}
         idp_data = %IdpData{idp_data | esaml_sp_rec: get_esaml_sp(sp, idp_data)}
         %IdpData{idp_data | valid?: cert_config_ok?(idp_data, sp)}
@@ -305,6 +295,12 @@ defmodule Samly.IdpData do
 
   # @spec to_esaml_idp_metadata(IdpData.t(), map()) :: :esaml_idp_metadata
   defp to_esaml_idp_metadata(%IdpData{} = idp_data, %{} = idp_config) do
+    Logger.info("to_esaml_idp_metadata")
+    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
+      Logger.info("---")
+      IO.inspect(get_sso_slo_urls(idp_data, idp_config))
+      Logger.info("---")
+    end
     {sso_url, slo_url} = get_sso_slo_urls(idp_data, idp_config)
     sso_url = if sso_url, do: String.to_charlist(sso_url), else: []
     slo_url = if slo_url, do: String.to_charlist(slo_url), else: :undefined
@@ -318,10 +314,16 @@ defmodule Samly.IdpData do
   end
 
   defp get_sso_slo_urls(%IdpData{} = idp_data, %{use_redirect_for_req: true}) do
+    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
+      Logger.info("get_sso_slo_urls with redirect_for_req")
+    end
     {idp_data.sso_redirect_url, idp_data.slo_redirect_url}
   end
 
   defp get_sso_slo_urls(%IdpData{} = idp_data, %{use_redirect_for_req: false}) do
+    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
+      Logger.info("get_sso_slo_urls without redirect_for_req")
+    end
     {idp_data.sso_post_url, idp_data.slo_post_url}
   end
 
