@@ -91,9 +91,11 @@ defmodule Samly.RouterUtil do
     else
       nonce = conn.private[:samly_nonce]
       Logger.info("use redirect false")
+      Logger.info("---")
       Logger.info(inspect(idp_url))
       Logger.info(inspect(signed_xml_payload))
       Logger.info(inspect(relay_state))
+      Logger.info("---")
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
 
       conn
