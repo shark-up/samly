@@ -26,7 +26,7 @@ defmodule Samly.RouterUtil do
       end
 
     idp = idp_id && Helper.get_idp(idp_id)
-    Logger.info(inspect((idp))
+    Logger.info(inspect(idp))
 
     if idp do
       conn |> Conn.put_private(:samly_idp, idp)
