@@ -166,7 +166,6 @@ defmodule Samly.IdpData do
       %SpData{} = sp ->
         if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
           Logger.info("esaml_idp_rec")
-          Logger.info()
           IO.inspect(to_esaml_idp_metadata(idp_data, opts_map))
           Logger.info("---")
         end
