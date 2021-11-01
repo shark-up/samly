@@ -9,6 +9,7 @@ defmodule Samly.RouterUtil do
   @subdomain_re ~r/^(?<subdomain>([^.]+))?\./
 
   def check_idp_id(conn, _opts) do
+    Logger.info("check_idp_id")
     idp_id_from = Application.get_env(:samly, :idp_id_from)
 
     idp_id =
@@ -25,6 +26,7 @@ defmodule Samly.RouterUtil do
       end
 
     idp = idp_id && Helper.get_idp(idp_id)
+    Logger.info(inspect((idp))
 
     if idp do
       conn |> Conn.put_private(:samly_idp, idp)
@@ -91,10 +93,8 @@ defmodule Samly.RouterUtil do
     else
       nonce = conn.private[:samly_nonce]
       Logger.info("use redirect false")
-      Logger.info("---")
+      Logger.info("idp_url")
       Logger.info(inspect(idp_url))
-      Logger.info(inspect(signed_xml_payload))
-      Logger.info(inspect(relay_state))
       Logger.info("---")
       resp_body = :esaml_binding.encode_http_post(idp_url, signed_xml_payload, relay_state, nonce)
 
