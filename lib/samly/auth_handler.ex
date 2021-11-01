@@ -93,6 +93,8 @@ defmodule Samly.AuthHandler do
 
   def send_signout_req(conn) do
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
+    Logger.info("idp data")
+    Logger.info(inspect(idp))
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
 
