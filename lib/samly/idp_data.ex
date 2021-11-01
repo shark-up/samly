@@ -298,7 +298,7 @@ defmodule Samly.IdpData do
     if(Enum.member?(["first_tenant_dA6vwVmxMjPFpbjU552jgi", "second_tenant_5V8L2QucJyEiyrF86fo9cV"], idp_data.id)) do
       Logger.info("to_esaml_idp_metadata")
       Logger.info(idp_data.id)
-      Logger.info("---")
+      IO.inspect(idp_data)
       IO.inspect(get_sso_slo_urls(idp_data, idp_config))
       Logger.info("---")
     end
