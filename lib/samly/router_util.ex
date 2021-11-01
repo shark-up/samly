@@ -11,6 +11,7 @@ defmodule Samly.RouterUtil do
   def check_idp_id(conn, _opts) do
     Logger.info("check_idp_id")
     idp_id_from = Application.get_env(:samly, :idp_id_from)
+    Logger.info(inspect(idp_id_from))
 
     idp_id =
       if idp_id_from == :subdomain do
