@@ -295,8 +295,9 @@ defmodule Samly.IdpData do
 
   # @spec to_esaml_idp_metadata(IdpData.t(), map()) :: :esaml_idp_metadata
   defp to_esaml_idp_metadata(%IdpData{} = idp_data, %{} = idp_config) do
-    Logger.info("to_esaml_idp_metadata")
-    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
+    if(Enum.member?(["first_tenant_dA6vwVmxMjPFpbjU552jgi", "second_tenant_5V8L2QucJyEiyrF86fo9cV"], idp_data.id)) do
+      Logger.info("to_esaml_idp_metadata")
+      Logger.info(idp_data.id)
       Logger.info("---")
       IO.inspect(get_sso_slo_urls(idp_data, idp_config))
       Logger.info("---")
@@ -314,15 +315,17 @@ defmodule Samly.IdpData do
   end
 
   defp get_sso_slo_urls(%IdpData{} = idp_data, %{use_redirect_for_req: true}) do
-    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
+    if(Enum.member?(["first_tenant_dA6vwVmxMjPFpbjU552jgi", "second_tenant_5V8L2QucJyEiyrF86fo9cV"], idp_data.id)) do
       Logger.info("get_sso_slo_urls with redirect_for_req")
+      Logger.info(idp_data.id)
     end
     {idp_data.sso_redirect_url, idp_data.slo_redirect_url}
   end
 
   defp get_sso_slo_urls(%IdpData{} = idp_data, %{use_redirect_for_req: false}) do
-    if(idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV") do
+    if(Enum.member?(["first_tenant_dA6vwVmxMjPFpbjU552jgi", "second_tenant_5V8L2QucJyEiyrF86fo9cV"], idp_data.id)) do
       Logger.info("get_sso_slo_urls without redirect_for_req")
+      Logger.info(idp_data.id)
     end
     {idp_data.sso_post_url, idp_data.slo_post_url}
   end
