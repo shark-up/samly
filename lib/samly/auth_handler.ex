@@ -107,6 +107,9 @@ defmodule Samly.AuthHandler do
         {idp_signout_url, req_xml_frag} =
           Helper.gen_idp_signout_req(sp, idp_rec, subject_rec, session_index)
 
+          Logger.info("send_signout_req")
+          Logger.info(inspect(Helper.gen_idp_signout_req(sp, idp_rec, subject_rec, session_index)))
+
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
