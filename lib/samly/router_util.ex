@@ -29,7 +29,7 @@ defmodule Samly.RouterUtil do
     if idp do
       conn |> Conn.put_private(:samly_idp, idp)
     else
-      Logger.error("check_idp_id failed '#{idp_id}'")
+      Logger.error("check_idp_id failed '#{idp_id}' (#{idp_id_from})")
       conn |> Conn.send_resp(403, "invalid_request unknown IdP") |> Conn.halt()
     end
   end
