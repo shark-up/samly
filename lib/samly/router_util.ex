@@ -24,7 +24,8 @@ defmodule Samly.RouterUtil do
             case conn.params do
               %{"glob" => glob_attrs} ->
                 Logger.info("glob")
-                Logger.info(glob_attrs)
+                Logger.info(inspect(conn.params))
+                Logger.info(inspect(glob_attrs))
                 nil
               _ ->
                 nil
