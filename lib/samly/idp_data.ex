@@ -312,6 +312,9 @@ defmodule Samly.IdpData do
   end
 
   defp get_sso_slo_urls(%IdpData{} = idp_data, %{use_redirect_for_req: false} = opts) do
+    if idp_data.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV" do
+      Logger.info(inspect(opts))
+    end
     {idp_data.sso_post_url, slo_url(idp_data, opts)}
   end
 
