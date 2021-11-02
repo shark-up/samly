@@ -120,15 +120,19 @@ defmodule Samly.SPHandler do
 
   def handle_logout_response(conn) do
     Logger.info("handle_logout_response")
-    Logger.info(inspect(conn.params))
-    Logger.info(inspect(conn.body_params))
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: _idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
 
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]
-    relay_state = (conn.body_params["RelayState"] || conn.params["RelayState"]) |> URI.decode_www_form()
+    body_rls = conn.body_params["RelayState"]
+    Logger.info("body_rls #{body_rls}")
+    param_rls = Map.get(conn.params, "RelayState")
+    Logger.info("param_rls #{param_rls}")
+    rls = body_rls || param_rls
+    Logger.info("rls '#{rls}'")
+    relay_state = URI.decode_www_form(rls)
 
     with {:ok, _payload} <- Helper.decode_idp_signout_resp(sp, saml_encoding, saml_response),
          ^relay_state when relay_state != nil <- get_session(conn, "relay_state"),
