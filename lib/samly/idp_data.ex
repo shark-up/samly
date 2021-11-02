@@ -158,9 +158,11 @@ defmodule Samly.IdpData do
   @spec update_esaml_recs(%IdpData{}, %{required(id()) => %SpData{}}, map()) :: %IdpData{}
   defp update_esaml_recs(idp_data, service_providers, opts_map) do
     Logger.info("update_esaml_recs")
+
     if opts_map.id == "second_tenant_5V8L2QucJyEiyrF86fo9cV" do
       Logger.info(inspect(opts_map))
     end
+
     case Map.get(service_providers, idp_data.sp_id) do
       %SpData{} = sp ->
         idp_data = %IdpData{idp_data | esaml_idp_rec: to_esaml_idp_metadata(idp_data, opts_map)}
