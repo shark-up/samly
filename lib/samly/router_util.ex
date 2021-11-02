@@ -23,7 +23,6 @@ defmodule Samly.RouterUtil do
             idp_id
 
           _ ->
-            Logger.info(inspect(conn.parmas |> Map.keys()))
             case conn.params do
               %{"idp_id" => idp_id} ->
                 idp_id
