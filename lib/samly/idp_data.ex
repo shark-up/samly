@@ -315,9 +315,10 @@ defmodule Samly.IdpData do
     {idp_data.sso_post_url, slo_url(idp_data, opts)}
   end
 
-  # defp slo_url(idp_data, %{use_redirect_for_slo: true}) do
-  #   idp_data.slo_redirect_url
-  # end
+  defp slo_url(idp_data, %{use_redirect_for_slo: true}) do
+    Logger.info("slo url when use_redirect_for_slo checked")
+    idp_data.slo_redirect_url
+  end
 
   defp slo_url(idp_data, %{use_redirect_for_req: true}) do
     idp_data.slo_redirect_url
