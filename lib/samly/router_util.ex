@@ -18,13 +18,16 @@ defmodule Samly.RouterUtil do
           _ -> nil
         end
       else
-        case conn.params do
-          %{"glob" => glob_attrs} ->
-            Keyword.get(glob_attrs, "idp_id")
+        case conn.params["idp_id_seg"] do
+          [idp_id] -> idp_id
           _ ->
-            case conn.params["idp_id_seg"] do
-              [idp_id] -> idp_id
-              _ -> nil
+            case conn.params do
+              %{"glob" => glob_attrs} ->
+                Logger.info("glob")
+                Logger.info(glob_attrs)
+                nil
+              _ ->
+                nil
             end
         end
       end
