@@ -5,6 +5,8 @@ defmodule Samly.SPRouter do
   import Plug.Conn
   import Samly.RouterUtil, only: [check_idp_id: 2]
 
+  require Logger
+
   plug :fetch_session
   plug :match
   plug :check_idp_id
@@ -20,7 +22,7 @@ defmodule Samly.SPRouter do
   end
 
   post "/logout/*idp_id_seg" do
-    IO.inspect(conn.params)
+    Logger.info(inspect(conn.params))
     cond do
       conn.params["SAMLResponse"] != nil -> Samly.SPHandler.handle_logout_response(conn)
       conn.params["SAMLRequest"] != nil -> Samly.SPHandler.handle_logout_request(conn)

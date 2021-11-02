@@ -121,6 +121,7 @@ defmodule Samly.SPHandler do
   end
 
   def handle_logout_response(conn) do
+    Logger.info("handle_logout_response")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: _idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
@@ -137,7 +138,10 @@ defmodule Samly.SPHandler do
       |> configure_session(drop: true)
       |> redirect(302, target_url)
     else
-      error -> conn |> send_resp(403, "invalid_request #{inspect(error)}")
+      error ->
+        Logger.error("handle_logout_resoonse failed")
+        Logger.error(inspect(error))
+        send_resp(conn, 403, "invalid_request #{inspect(error)}")
     end
 
     # rescue
