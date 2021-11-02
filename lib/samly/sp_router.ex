@@ -22,8 +22,6 @@ defmodule Samly.SPRouter do
   end
 
   post "/logout/*idp_id_seg" do
-    Logger.info(inspect(conn.params))
-
     cond do
       conn.params["SAMLResponse"] != nil -> Samly.SPHandler.handle_logout_response(conn)
       conn.params["SAMLRequest"] != nil -> Samly.SPHandler.handle_logout_request(conn)
@@ -32,9 +30,6 @@ defmodule Samly.SPRouter do
   end
 
   get "/logout/*idp_id_seg" do
-    Logger.info("GET /logout")
-    Logger.info(inspect(conn.params))
-
     cond do
       conn.params["SAMLResponse"] != nil -> Samly.SPHandler.handle_logout_response(conn)
       conn.params["SAMLRequest"] != nil -> Samly.SPHandler.handle_logout_request(conn)

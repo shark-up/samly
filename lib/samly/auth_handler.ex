@@ -122,9 +122,7 @@ defmodule Samly.AuthHandler do
           relay_state
         )
 
-      other ->
-        Logger.error("send signout failed")
-        Logger.error(inspect(other))
+      _ ->
         conn |> send_resp(403, "access_denied")
     end
 

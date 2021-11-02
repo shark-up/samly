@@ -137,10 +137,7 @@ defmodule Samly.SPHandler do
       |> configure_session(drop: true)
       |> redirect(302, target_url)
     else
-      error ->
-        Logger.error("handle_logout_resoonse failed")
-        Logger.error(inspect(error))
-        send_resp(conn, 403, "invalid_request #{inspect(error)}")
+      error -> conn |> send_resp(403, "invalid_request #{inspect(error)}")
     end
 
     # rescue
