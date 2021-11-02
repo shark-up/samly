@@ -110,15 +110,6 @@ defmodule Samly.AuthHandler do
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
-        use_redirect = idp.use_redirect_for_req
-        # use_redirect =
-        #   if idp_id == "second_tenant_5V8L2QucJyEiyrF86fo9cV",
-        #     do: true,
-        #     else: idp.use_redirect_for_req
-
-        Logger.info("use redirect '#{use_redirect}'")
-        Logger.info("idp_signout_url '#{idp_signout_url}'")
-
         conn
         |> put_session("target_url", target_url)
         |> put_session("relay_state", relay_state)
@@ -126,7 +117,7 @@ defmodule Samly.AuthHandler do
         |> delete_session("samly_assertion_key")
         |> send_saml_request(
           idp_signout_url,
-          use_redirect,
+          idp.use_redirect_for_req,
           req_xml_frag,
           relay_state
         )

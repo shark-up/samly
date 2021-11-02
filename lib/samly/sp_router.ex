@@ -32,6 +32,7 @@ defmodule Samly.SPRouter do
   end
 
   get "/logout/*idp_id_seg" do
+    Logger.info("GET /logout")
     Logger.info(inspect(conn.params))
 
     cond do
