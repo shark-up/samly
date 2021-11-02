@@ -120,6 +120,8 @@ defmodule Samly.SPHandler do
 
   def handle_logout_response(conn) do
     Logger.info("handle_logout_response")
+    Logger.info(inspect(conn.params))
+    Logger.info(inspect(conn.body_params))
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: _idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
