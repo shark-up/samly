@@ -110,17 +110,14 @@ defmodule Samly.AuthHandler do
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
-        use_redirect =
-          if idp_id == "second_tenant_5V8L2QucJyEiyrF86fo9cV",
-            do: true,
-            else: idp.use_redirect_for_req
+        use_redirect = idp.use_redirect_for_req
+        # use_redirect =
+        #   if idp_id == "second_tenant_5V8L2QucJyEiyrF86fo9cV",
+        #     do: true,
+        #     else: idp.use_redirect_for_req
 
         Logger.info("use redirect '#{use_redirect}'")
-
-        if idp_id == "second_tenant_5V8L2QucJyEiyrF86fo9cV" do
-          Logger.info(inspect(idp))
-          Logger.info(inspect(idp))
-        end
+        Logger.info("idp_signout_url '#{idp_signout_url}'")
 
         conn
         |> put_session("target_url", target_url)
@@ -134,7 +131,9 @@ defmodule Samly.AuthHandler do
           relay_state
         )
 
-      _ ->
+      other ->
+        Logger.error("send signout failed")
+        Logger.error(inspect(other))
         conn |> send_resp(403, "access_denied")
     end
 
