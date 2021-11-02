@@ -57,14 +57,18 @@ defmodule Samly.Helper do
   end
 
   def gen_idp_signout_req(sp, idp_metadata, subject_rec, session_index) do
+    Logger.info("gen_idp_signout_req\\4")
     idp_signout_url = Esaml.esaml_idp_metadata(idp_metadata, :logout_location)
     xml_frag = :esaml_sp.generate_logout_request(idp_signout_url, session_index, subject_rec, sp)
+    Logger.info(inspect(xml_frag))
     {idp_signout_url, xml_frag}
   end
 
   def gen_idp_signout_resp(sp, idp_metadata, signout_status) do
+    Logger.info("gen_idp_signout_req\\3")
     idp_signout_url = Esaml.esaml_idp_metadata(idp_metadata, :logout_location)
     xml_frag = :esaml_sp.generate_logout_response(idp_signout_url, signout_status, sp)
+    Logger.info(inspect(xml_frag))
     {idp_signout_url, xml_frag}
   end
 
