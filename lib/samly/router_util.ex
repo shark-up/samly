@@ -18,6 +18,7 @@ defmodule Samly.RouterUtil do
           _ -> nil
         end
       else
+        Logger.info(inspect(conn.params))
         case conn.params["idp_id_seg"] do
           [idp_id] -> idp_id
           _ -> nil
