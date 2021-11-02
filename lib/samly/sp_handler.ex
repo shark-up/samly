@@ -26,9 +26,11 @@ defmodule Samly.SPHandler do
   end
 
   def consume_signin_response(conn) do
+    Logger.info("consume_signin_response")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{pre_session_create_pipeline: pipeline, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
+    Logger.info(inspect(conn.body_params))
 
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]
