@@ -5,8 +5,6 @@ defmodule Samly.SPRouter do
   import Plug.Conn
   import Samly.RouterUtil, only: [check_idp_id: 2]
 
-  require Logger
-
   plug :fetch_session
   plug :match
   plug :check_idp_id
