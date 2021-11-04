@@ -21,17 +21,17 @@ defmodule Samly.SPRouter do
 
   post "/logout/*idp_id_seg" do
     cond do
-      conn.params["SAMLResponse"] != nil -> Samly.SPHandler.handle_logout_response(conn)
-      conn.params["SAMLRequest"] != nil -> Samly.SPHandler.handle_logout_request(conn)
-      true -> conn |> send_resp(403, "invalid_request")
+      is_bitstring(conn.params["SAMLResponse"]) -> Samly.SPHandler.handle_logout_response(conn)
+      is_bitstring(conn.params["SAMLRequest"]) -> Samly.SPHandler.handle_logout_request(conn)
+      true -> send_resp(conn, 403, "invalid_request")
     end
   end
 
   get "/logout/*idp_id_seg" do
     cond do
-      conn.params["SAMLResponse"] != nil -> Samly.SPHandler.handle_logout_response(conn)
-      conn.params["SAMLRequest"] != nil -> Samly.SPHandler.handle_logout_request(conn)
-      true -> conn |> send_resp(403, "invalid_request")
+      is_bitstring(conn.params["SAMLResponse"]) -> Samly.SPHandler.handle_logout_response(conn)
+      is_bitstring(conn.params["SAMLRequest"]) -> Samly.SPHandler.handle_logout_request(conn)
+      true -> send_resp(conn, 403, "invalid_request")
     end
   end
 
