@@ -124,8 +124,10 @@ defmodule Samly.SPHandler do
     sp = ensure_sp_uris_set(sp_rec, conn)
 
     saml_encoding = conn.body_params["SAMLEncoding"]
-    saml_response = conn.body_params["SAMLResponse"]
-    relay_state = conn.body_params["RelayState"] |> URI.decode_www_form()
+    # Handle both POST and Redirect
+    saml_response = conn.body_params["SAMLResponse"] || Map.get(conn.params, "SAMLResponse")
+    rls = conn.body_params["RelayState"] || Map.get(conn.params, "RelayState")
+    relay_state = URI.decode_www_form(rls)
 
     with {:ok, _payload} <- Helper.decode_idp_signout_resp(sp, saml_encoding, saml_response),
          ^relay_state when relay_state != nil <- get_session(conn, "relay_state"),

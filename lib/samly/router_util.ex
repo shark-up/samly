@@ -18,9 +18,13 @@ defmodule Samly.RouterUtil do
           _ -> nil
         end
       else
-        case conn.params["idp_id_seg"] do
-          [idp_id] -> idp_id
-          _ -> nil
+        with %{"idp_id_seg" => [idp_id]} <- conn.params do
+          idp_id
+        else
+          %{"idp_id" => idp_id} ->
+            idp_id
+          _ ->
+            nil
         end
       end
 
