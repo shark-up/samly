@@ -96,7 +96,6 @@ defmodule Samly.AuthHandler do
   end
 
   def send_signout_req(conn) do
-    Logger.info("send_signout_req")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
@@ -112,19 +111,14 @@ defmodule Samly.AuthHandler do
         {idp_signout_url, req_xml_frag} =
           Helper.gen_idp_signout_req(sp, idp_rec, subject_rec, session_index)
 
-        Logger.info("conn")
-        Logger.info(inspect(Plug.Conn.get_session(conn) |> Map.keys()))
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
-        new_conn = conn
+        conn
         |> put_session("target_url", target_url)
         |> put_session("relay_state", relay_state)
         |> put_session("idp_id", idp_id)
         |> delete_session("samly_assertion_key")
-        Logger.info("new_conn session")
-        Logger.info(inspect(Plug.Conn.get_session(new_conn) |> Map.keys()))
-        new_conn
         |> send_saml_request(
           idp_signout_url,
           idp.use_redirect_for_req,
