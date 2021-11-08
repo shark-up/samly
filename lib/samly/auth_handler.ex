@@ -100,19 +100,17 @@ defmodule Samly.AuthHandler do
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
-    Logger.info(inspect(idp))
-    Logger.info("---")
 
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
-    Logger.info(inspect(target_url))
-    Logger.info("---")
-    Logger.info(inspect(assertion_key))
-    Logger.info("---")
 
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id, authn: authn, subject: subject} ->
+        Logger.info(idp_id)
+        Logger.info(authn)
+        Logger.info(subject)
         session_index = Map.get(authn, "session_index", "")
+        Logger.info("session_index '#{session_index}'")
         subject_rec = Subject.to_rec(subject)
 
         {idp_signout_url, req_xml_frag} =
