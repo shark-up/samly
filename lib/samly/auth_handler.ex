@@ -107,8 +107,8 @@ defmodule Samly.AuthHandler do
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id, authn: authn, subject: subject} ->
         Logger.info(idp_id)
-        Logger.info(authn)
-        Logger.info(subject)
+        Logger.info(inspect(authn))
+        Logger.info(inspect(subject))
         session_index = Map.get(authn, "session_index", "")
         Logger.info("session_index '#{session_index}'")
         subject_rec = Subject.to_rec(subject)
