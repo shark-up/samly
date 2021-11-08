@@ -113,8 +113,7 @@ defmodule Samly.AuthHandler do
           Helper.gen_idp_signout_req(sp, idp_rec, subject_rec, session_index)
 
         Logger.info("conn")
-        Logger.info(inspect(conn.private))
-        Logger.info(inspect(Plug.Conn.get_session(conn)))
+        Logger.info(inspect(Plug.Conn.get_session(conn) |> Map.keys()))
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
@@ -124,7 +123,7 @@ defmodule Samly.AuthHandler do
         |> put_session("idp_id", idp_id)
         |> delete_session("samly_assertion_key")
         Logger.info("new_conn session")
-        Logger.info(inspect(Plug.Conn.get_session(new_conn)))
+        Logger.info(inspect(Plug.Conn.get_session(new_conn) |> Map.keys()))
         new_conn
         |> send_saml_request(
           idp_signout_url,
