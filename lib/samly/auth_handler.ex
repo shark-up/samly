@@ -106,16 +106,14 @@ defmodule Samly.AuthHandler do
 
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id, authn: authn, subject: subject} ->
-        Logger.info(idp_id)
-        Logger.info(inspect(authn))
-        Logger.info(inspect(subject))
         session_index = Map.get(authn, "session_index", "")
-        Logger.info("session_index '#{session_index}'")
         subject_rec = Subject.to_rec(subject)
 
         {idp_signout_url, req_xml_frag} =
           Helper.gen_idp_signout_req(sp, idp_rec, subject_rec, session_index)
 
+        Logger.info("conn")
+        Logger.info(inspect(conn))
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
