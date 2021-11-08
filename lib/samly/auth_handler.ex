@@ -96,12 +96,19 @@ defmodule Samly.AuthHandler do
   end
 
   def send_signout_req(conn) do
+    Logger.info("send_signout_req")
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
+    Logger.info(inspect(idp))
+    Logger.info("---")
 
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
+    Logger.info(inspect(target_url))
+    Logger.info("---")
+    Logger.info(inspect(assertion_key))
+    Logger.info("---")
 
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id, authn: authn, subject: subject} ->
