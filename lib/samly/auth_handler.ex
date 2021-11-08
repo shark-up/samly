@@ -124,7 +124,7 @@ defmodule Samly.AuthHandler do
         |> put_session("idp_id", idp_id)
         |> delete_session("samly_assertion_key")
         Logger.info("new_conn session")
-        Logger.info(Plug.Conn.get_session(new_conn))
+        Logger.info(inspect(Plug.Conn.get_session(new_conn)))
         new_conn
         |> send_saml_request(
           idp_signout_url,
