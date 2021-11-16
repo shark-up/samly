@@ -316,7 +316,7 @@ defmodule Samly.IdpData do
   end
 
   defp slo_url(idp_data, %{use_redirect_for_slo: true}) do
-    Logger.info("slo url when use_redirect_for_slo checked for '#{idp_data.id}'")
+    Logger.info("slo url when use_redirect_for_slo checked for '#{idp_data.id}' -> (#{idp_data.slo_redirect_url})")
     idp_data.slo_redirect_url
   end
 
