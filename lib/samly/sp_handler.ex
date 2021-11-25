@@ -133,7 +133,7 @@ defmodule Samly.SPHandler do
     Logger.info(inspect(rls))
     relay_state = URI.decode_www_form(rls)
     Logger.info("relay_sate")
-    Logger.info(inspect(relay_sate))
+    Logger.info(inspect(relay_state))
 
     with {:ok, _payload} <- Helper.decode_idp_signout_resp(sp, saml_encoding, saml_response),
          ^relay_state when relay_state != nil <- get_session(conn, "relay_state"),
