@@ -93,6 +93,9 @@ defmodule Samly.Helper do
     with {:ok, xml_frag} <- decode_saml_payload(saml_encoding, saml_response),
          nodes when is_list(nodes) and length(nodes) == 1 <-
            :xmerl_xpath.string('/samlp:LogoutResponse', xml_frag, [{:namespace, resp_ns}]) do
+      Logger.info("reached validate_logout_response")
+      IO.inspect(sp)
+      IO.inspect(xml_frag)
       :esaml_sp.validate_logout_response(xml_frag, sp)
     else
       err ->
