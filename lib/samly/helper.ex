@@ -80,9 +80,6 @@ defmodule Samly.Helper do
 
   def decode_idp_signout_resp(sp, saml_encoding, saml_response) do
     Logger.info("decode_idp_signout_resp")
-    IO.inspect(sp)
-    IO.inspect(saml_encoding)
-    IO.inspect(saml_response)
     resp_ns = [
       {'samlp', 'urn:oasis:names:tc:SAML:2.0:protocol'},
       {'saml', 'urn:oasis:names:tc:SAML:2.0:assertion'},
@@ -95,7 +92,9 @@ defmodule Samly.Helper do
            :xmerl_xpath.string('/samlp:LogoutResponse', xml_frag, [{:namespace, resp_ns}]) do
       Logger.info("reached validate_logout_response")
       IO.inspect(sp)
+      Logger.info(">>>>")
       IO.inspect(xml_frag)
+      Logger.info("<<<<")
       :esaml_sp.validate_logout_response(xml_frag, sp)
     else
       err ->
