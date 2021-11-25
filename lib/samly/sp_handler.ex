@@ -145,8 +145,6 @@ defmodule Samly.SPHandler do
     else
       error ->
         Logger.error("failed to logout")
-        Logger.info(inspect(Helper.decode_idp_signout_resp(sp, saml_encoding, saml_response)))
-        IO.inspect(Helper.decode_idp_signout_resp(sp, saml_encoding, saml_response))
         conn |> send_resp(403, "invalid_request #{inspect(error)}")
     end
 

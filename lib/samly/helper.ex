@@ -1,6 +1,7 @@
 defmodule Samly.Helper do
   @moduledoc false
 
+  require Logger
   require Samly.Esaml
   alias Samly.{Assertion, Esaml, IdpData}
 
@@ -78,18 +79,26 @@ defmodule Samly.Helper do
   end
 
   def decode_idp_signout_resp(sp, saml_encoding, saml_response) do
+    Logger.info("decode_idp_signout_resp")
+    IO.inspect(sp)
+    IO.inspect(saml_encoding)
+    IO.inspect(saml_response)
     resp_ns = [
       {'samlp', 'urn:oasis:names:tc:SAML:2.0:protocol'},
       {'saml', 'urn:oasis:names:tc:SAML:2.0:assertion'},
       {'ds', 'http://www.w3.org/2000/09/xmldsig#'}
     ]
+    Logger.info("---")
 
     with {:ok, xml_frag} <- decode_saml_payload(saml_encoding, saml_response),
          nodes when is_list(nodes) and length(nodes) == 1 <-
            :xmerl_xpath.string('/samlp:LogoutResponse', xml_frag, [{:namespace, resp_ns}]) do
       :esaml_sp.validate_logout_response(xml_frag, sp)
     else
-      _ -> {:error, :invalid_request}
+      err ->
+        Logger.error("error in decode_idp_signout_resp")
+        IO.inspect(err)
+        {:error, :invalid_request}
     end
   end
 
