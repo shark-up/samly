@@ -34,6 +34,9 @@ defmodule Samly.SPHandler do
     saml_response = conn.body_params["SAMLResponse"]
     relay_state = conn.body_params["RelayState"] |> URI.decode_www_form()
 
+    IO.inspect(conn.body_params, label: "consume_signin_response_body_params")
+    IO.inspect(relay_state, label: "consume_signin_response_relay_state")
+
     with {:ok, assertion} <- Helper.decode_idp_auth_resp(sp, saml_encoding, saml_response),
          :ok <- validate_authresp(conn, assertion, relay_state),
          conn = conn |> put_private(:samly_assertion, assertion),
@@ -85,6 +88,7 @@ defmodule Samly.SPHandler do
 
   # SP-initiated flow auth response
   defp validate_authresp(conn, _assertion, relay_state) do
+    IO.inspect(relay_state, label: "validate_authresp")
     %IdpData{id: idp_id} = conn.private[:samly_idp]
     rs_in_session = get_session(conn, "relay_state")
     idp_id_in_session = get_session(conn, "idp_id")
