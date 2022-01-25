@@ -63,7 +63,8 @@ defmodule Samly.AuthHandler do
     assertion_key = get_session(conn, "samly_assertion_key")
 
     case State.get_assertion(conn, assertion_key) do
-      %Assertion{idp_id: ^idp_id} ->
+      %Assertion{idp_id: ^idp_id} = assertion ->
+        IO.inspect(assertion, label: "send_signin_req found assertion")
         conn |> redirect(302, target_url)
 
       _ ->
