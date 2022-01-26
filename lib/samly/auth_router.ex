@@ -12,20 +12,26 @@ defmodule Samly.AuthRouter do
   plug :check_target_url
   plug :dispatch
 
-  get "/signin/*idp_id_seg" do
-    conn |> Samly.AuthHandler.initiate_sso_req()
+  scope "/signin" do
+    plug Plug.CSRFProtection
+
+    get "/*idp_id_seg" do
+      conn |> Samly.AuthHandler.initiate_sso_req()
+    end
+
+    post "/*idp_id_seg" do
+      conn |> Samly.AuthHandler.send_signin_req()
+    end
   end
 
-  post "/signin/*idp_id_seg" do
-    conn |> Samly.AuthHandler.send_signin_req()
-  end
+  scope "/signout" do
+    get "/*idp_id_seg" do
+      conn |> Samly.AuthHandler.initiate_sso_req()
+    end
 
-  get "/signout/*idp_id_seg" do
-    conn |> Samly.AuthHandler.initiate_sso_req()
-  end
-
-  post "/signout/*idp_id_seg" do
-    conn |> Samly.AuthHandler.send_signout_req()
+    post "/*idp_id_seg" do
+      conn |> Samly.AuthHandler.send_signout_req()
+    end
   end
 
   match _ do

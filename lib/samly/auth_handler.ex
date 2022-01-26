@@ -45,7 +45,7 @@ defmodule Samly.AuthHandler do
     opts = [
       nonce: conn.private[:samly_nonce],
       action: URI.encode(conn.request_path),
-      target_url: URI.encode_www_form(target_url),
+      target_url: URI.encode_www_form(target_url)
       # csrf_token: get_csrf_token()
     ]
 
@@ -74,6 +74,7 @@ defmodule Samly.AuthHandler do
           Helper.gen_idp_signin_req(sp, idp_rec, Map.get(idp, :nameid_format))
 
         IO.inspect(relay_state, label: "send_signin_req_relay_state")
+
         conn
         |> configure_session(renew: true)
         |> put_session("relay_state", relay_state)
