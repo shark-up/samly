@@ -46,7 +46,7 @@ defmodule Samly.AuthHandler do
       nonce: conn.private[:samly_nonce],
       action: URI.encode(conn.request_path),
       target_url: URI.encode_www_form(target_url),
-      csrf_token: get_csrf_token()
+      # csrf_token: get_csrf_token()
     ]
 
     conn
