@@ -94,7 +94,7 @@ defmodule Samly.SPHandler do
     idp_id_in_session = get_session(conn, "idp_id")
     url_in_session = get_session(conn, "target_url")
 
-    IO.inspect(get_session(conn), label: "validate_authresp_session")
+    # IO.inspect(get_session(conn), label: "validate_authresp_session")
     IO.inspect(idp_id, label: "validate_authresp_idp_id")
     IO.inspect(rs_in_session, label: "validate_authresp_rs_in_session")
     IO.inspect(idp_id_in_session, label: "validate_authresp_idp_id_in_session")

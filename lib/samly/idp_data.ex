@@ -315,6 +315,13 @@ defmodule Samly.IdpData do
     {idp_data.sso_post_url, slo_url(idp_data, opts)}
   end
 
+  defp get_sso_slo_urls(%IdpData{} = idp_data, _opts_map) do
+    {
+      idp_data.sso_post_url || idp_data.sso_redirect_url,
+      idp_data.slo_post_url || idp_data.slo_redirect_url
+    }
+  end
+
   defp slo_url(idp_data, %{use_redirect_for_slo: true}) do
     Logger.info("slo url when use_redirect_for_slo checked for '#{idp_data.id}'")
     idp_data.slo_redirect_url
@@ -326,13 +333,6 @@ defmodule Samly.IdpData do
 
   defp slo_url(idp_data, %{use_redirect_for_req: false}) do
     idp_data.slo_post_url
-  end
-
-  defp get_sso_slo_urls(%IdpData{} = idp_data, _opts_map) do
-    {
-      idp_data.sso_post_url || idp_data.sso_redirect_url,
-      idp_data.slo_post_url || idp_data.slo_redirect_url
-    }
   end
 
   @spec idp_cert_fingerprints(certs()) :: [binary()]

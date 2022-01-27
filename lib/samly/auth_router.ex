@@ -5,46 +5,27 @@ defmodule Samly.AuthRouter do
   import Plug.Conn
   import Samly.RouterUtil, only: [check_idp_id: 2, check_target_url: 2]
 
-  pipeline :csrf_pipeline do
-    plug :fetch_session
-    plug Plug.CSRFProtection
-    plug :match
-    plug :check_idp_id
-    plug :check_target_url
-    plug :dispatch
+  plug :fetch_session
+  plug Plug.CSRFProtection
+  plug :match
+  plug :check_idp_id
+  plug :check_target_url
+  plug :dispatch
+
+  get "/signin/*idp_id_seg" do
+    conn |> Samly.AuthHandler.initiate_sso_req()
   end
 
-  pipeline :without_csrf_pipeline do
-    plug :fetch_session
-    # plug Plug.CSRFProtection
-    plug :match
-    plug :check_idp_id
-    plug :check_target_url
-    plug :dispatch
+  post "/signin/*idp_id_seg" do
+    conn |> Samly.AuthHandler.send_signin_req()
   end
 
-  scope "/signin" do
-    pipe_through(:csrf_pipeline)
-
-    get "/*idp_id_seg" do
-      conn |> Samly.AuthHandler.initiate_sso_req()
-    end
-
-    post "/*idp_id_seg" do
-      conn |> Samly.AuthHandler.send_signin_req()
-    end
+  get "/signout/*idp_id_seg" do
+    conn |> put_private(:plug_skip_csrf_protection, true) |> Samly.AuthHandler.initiate_sso_req()
   end
 
-  scope "/signout" do
-    pipe_through(:without_csrf_pipeline)
-
-    get "/*idp_id_seg" do
-      conn |> Samly.AuthHandler.initiate_sso_req()
-    end
-
-    post "/*idp_id_seg" do
-      conn |> Samly.AuthHandler.send_signout_req()
-    end
+  post "/signout/*idp_id_seg" do
+    conn |> put_private(:plug_skip_csrf_protection, true) |> Samly.AuthHandler.send_signout_req()
   end
 
   match _ do
