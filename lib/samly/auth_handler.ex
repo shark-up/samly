@@ -38,7 +38,7 @@ defmodule Samly.AuthHandler do
   """
 
   def initiate_sso_req(conn) do
-    # import Plug.CSRFProtection, only: [get_csrf_token: 0]
+    import Plug.CSRFProtection, only: [get_csrf_token: 0]
 
     target_url = conn.private[:samly_target_url] || "/"
 
@@ -46,7 +46,7 @@ defmodule Samly.AuthHandler do
       nonce: conn.private[:samly_nonce],
       action: URI.encode(conn.request_path),
       target_url: URI.encode_www_form(target_url)
-      # csrf_token: get_csrf_token()
+      csrf_token: get_csrf_token()
     ]
 
     conn
