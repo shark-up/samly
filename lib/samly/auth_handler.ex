@@ -96,6 +96,7 @@ defmodule Samly.AuthHandler do
 
   def send_signout_req(conn) do
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
+    IO.inspect(idp, "send_signout_req")
     %IdpData{esaml_idp_rec: idp_rec, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
 
@@ -103,7 +104,8 @@ defmodule Samly.AuthHandler do
     assertion_key = get_session(conn, "samly_assertion_key")
 
     case State.get_assertion(conn, assertion_key) do
-      %Assertion{idp_id: ^idp_id, authn: authn, subject: subject} ->
+      %Assertion{idp_id: ^idp_id, authn: authn, subject: subject} = assertion ->
+        IO.inspect(assertion, "assertion found")
         session_index = Map.get(authn, "session_index", "")
         subject_rec = Subject.to_rec(subject)
 
@@ -125,7 +127,8 @@ defmodule Samly.AuthHandler do
           relay_state
         )
 
-      _ ->
+      error ->
+        IO.inspect(error, "assertion not found")
         conn |> send_resp(403, "access_denied")
     end
 
