@@ -31,7 +31,6 @@ defmodule Samly.AuthRouter do
     IO.inspect("POST /signout/*idp_id_seg")
     Logger.info("POST /signout/*idp_id_seg")
 
-
     conn
     |> Samly.AuthHandler.send_signout_req()
   end
