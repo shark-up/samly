@@ -23,14 +23,12 @@ defmodule Samly.AuthRouter do
   end
 
   get "/signout/*idp_id_seg" do
-    IO.inspect("GET /signout/*idp_id_seg")
+    IO.inspect("/signout/*idp_id_seg", label: "GET")
     conn |> Samly.AuthHandler.initiate_sso_req()
   end
 
   post "/signout/*idp_id_seg" do
-    IO.inspect("POST /signout/*idp_id_seg")
-    Logger.info("POST /signout/*idp_id_seg")
-
+    IO.inspect("/signout/*idp_id_seg", label: "POST")
     conn
     |> Samly.AuthHandler.send_signout_req()
   end
