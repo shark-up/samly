@@ -5,6 +5,8 @@ defmodule Samly.AuthRouter do
   import Plug.Conn
   import Samly.RouterUtil, only: [check_idp_id: 2, check_target_url: 2]
 
+  require Logger
+
   plug :fetch_session
   plug Plug.CSRFProtection
   plug :match
@@ -27,6 +29,8 @@ defmodule Samly.AuthRouter do
 
   post "/signout/*idp_id_seg" do
     IO.inspect("POST /signout/*idp_id_seg")
+    Logger.info("POST /signout/*idp_id_seg")
+
 
     conn
     |> Samly.AuthHandler.send_signout_req()
