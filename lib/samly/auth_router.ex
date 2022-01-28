@@ -21,13 +21,14 @@ defmodule Samly.AuthRouter do
   end
 
   get "/signout/*idp_id_seg" do
-    conn |> put_private(:plug_skip_csrf_protection, true) |> Samly.AuthHandler.initiate_sso_req()
+    IO.inspect("GET /signout/*idp_id_seg")
+    conn |> Samly.AuthHandler.initiate_sso_req()
   end
 
   post "/signout/*idp_id_seg" do
+    IO.inspect("POST /signout/*idp_id_seg")
+
     conn
-    |> IO.inspect(label: "POST /signout/*idp_id_seg")
-    |> put_private(:plug_skip_csrf_protection, true)
     |> Samly.AuthHandler.send_signout_req()
   end
 
