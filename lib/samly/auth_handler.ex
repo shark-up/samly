@@ -116,7 +116,7 @@ defmodule Samly.AuthHandler do
         conn = State.delete_assertion(conn, assertion_key)
         relay_state = State.gen_id()
 
-        IO.inspect(idp_signout_url, "idp_signout_url")
+        IO.inspect(idp_signout_url, label: "idp_signout_url")
 
         conn
         |> put_session("target_url", target_url)
