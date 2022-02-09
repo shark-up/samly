@@ -1,13 +1,14 @@
 defmodule Samly.SPHandler do
   @moduledoc false
 
-  require Logger
   import Plug.Conn
+  import Samly.RouterUtil, only: [ensure_sp_uris_set: 2, send_saml_request: 5, redirect: 3]
+
   alias Plug.Conn
-  require Samly.Esaml
   alias Samly.{Assertion, Esaml, Helper, IdpData, State, Subject}
 
-  import Samly.RouterUtil, only: [ensure_sp_uris_set: 2, send_saml_request: 5, redirect: 3]
+  require Logger
+  require Samly.Esaml
 
   def send_metadata(conn) do
     %IdpData{} = idp = conn.private[:samly_idp]
@@ -33,6 +34,8 @@ defmodule Samly.SPHandler do
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]
     relay_state = conn.body_params["RelayState"] |> URI.decode_www_form()
+
+    Logger.debug("consume_signin_response body", body_params: inspect(conn.body_paramms))
 
     with {:ok, assertion} <- Helper.decode_idp_auth_resp(sp, saml_encoding, saml_response),
          :ok <- validate_authresp(conn, assertion, relay_state),
