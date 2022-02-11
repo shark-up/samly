@@ -39,9 +39,10 @@ defmodule Samly.SPHandler do
     Logger.debug("Relay State", body_params: inspect(relay_state))
 
     {:ok, body, conn} = read_body(conn)
-    Logger.debug("consume_signin_response read_body", body_params: inspect(body))
-    Logger.debug("consume_signin_response resp_body", body_params: inspect(conn.resp_body))
-    Logger.debug("consume_signin_response body_params", body_params: inspect(conn.body_params))
+
+    Logger.debug("consume_signin_response body_params",
+      body_params: conn.body_params |> Map.keys() |> inspect()
+    )
 
     with {:ok, assertion} <- Helper.decode_idp_auth_resp(sp, saml_encoding, saml_response),
          :ok <- validate_authresp(conn, assertion, relay_state),
@@ -65,7 +66,7 @@ defmodule Samly.SPHandler do
         conn
 
       {:error, reason} ->
-        Logger.debug("error in consume_signiresonse", body_params: inspect(reason))
+        Logger.debug("error in consume_signin_resonse", body_params: inspect(reason))
         send_resp(conn, 403, "access_denied #{inspect(reason)}")
 
       _ ->

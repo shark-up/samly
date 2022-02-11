@@ -74,8 +74,13 @@ defmodule Samly.Helper do
          {:ok, assertion_rec} <- :esaml_sp.validate_assertion(xml_frag, sp) do
       {:ok, Assertion.from_rec(assertion_rec)}
     else
-      {:error, reason} -> {:error, reason}
-      error -> {:error, {:invalid_request, "#{inspect(error)}"}}
+      {:error, reason} ->
+        Logger.debug("decode_idp_auth_resp error reason", body_params: inspect(reason))
+        {:error, reason}
+
+      error ->
+        Logger.debug("decode_idp_auth_resp error error", body_params: inspect(error))
+        {:error, {:invalid_request, "#{inspect(error)}"}}
     end
   end
 
@@ -113,7 +118,6 @@ defmodule Samly.Helper do
   defp decode_saml_payload(saml_encoding, saml_payload) do
     try do
       xml = :esaml_binding.decode_response(saml_encoding, saml_payload)
-      Logger.debug("decoded SAML Payload", body_params: inspect(xml))
       {:ok, xml}
     rescue
       error -> {:error, {:invalid_response, "#{inspect(error)}"}}
