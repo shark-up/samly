@@ -70,12 +70,14 @@ defmodule Samly.Helper do
   end
 
   def decode_idp_auth_resp(sp, saml_encoding, saml_response) do
-    with {:ok, xml_frag} <- decode_saml_payload(saml_encoding, saml_response),
-         {:ok, assertion_rec} <- :esaml_sp.validate_assertion(xml_frag, sp) do
+    {:ok, xml_frag} = decode_saml_payload(saml_encoding, saml_response)
+    # with {:ok, xml_frag} <- decode_saml_payload(saml_encoding, saml_response),
+    with {:ok, assertion_rec} <- :esaml_sp.validate_assertion(xml_frag, sp) do
       {:ok, Assertion.from_rec(assertion_rec)}
     else
       {:error, reason} ->
-        Logger.debug("sp source", body_params: inspect(sp))
+        Logger.debug("xml_frag", body_params: inspect(sp))
+        Logger.debug("sp source", body_params: inspect(xml_frag))
         Logger.debug("decode_idp_auth_resp error reason", body_params: inspect(reason))
         {:error, reason}
 
