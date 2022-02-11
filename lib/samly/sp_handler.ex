@@ -34,7 +34,9 @@ defmodule Samly.SPHandler do
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]
     relay_state_input = conn.body_params["RelayState"]
-    relay_state = if relay_state_input, do: URI.decode_www_form(relay_state_input)
+    # relay_state = if relay_state_input, do: URI.decode_www_form(relay_state_input)
+    relay_state = URI.decode_www_form(relay_state_input)
+    Logger.debug("Relay State", body_params: inspect(relay_state))
 
     {:ok, body, conn} = read_body(conn)
     Logger.debug("consume_signin_response read_body", body_params: inspect(body))
@@ -59,9 +61,15 @@ defmodule Samly.SPHandler do
       |> put_session("samly_assertion_key", assertion_key)
       |> redirect(302, target_url)
     else
-      {:halted, conn} -> conn
-      {:error, reason} -> conn |> send_resp(403, "access_denied #{inspect(reason)}")
-      _ -> conn |> send_resp(403, "access_denied")
+      {:halted, conn} ->
+        conn
+
+      {:error, reason} ->
+        Logger.debug("error in consume_signiresonse", body_params: inspect(reason))
+        send_resp(conn, 403, "access_denied #{inspect(reason)}")
+
+      _ ->
+        conn |> send_resp(403, "access_denied")
     end
 
     # rescue
