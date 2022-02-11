@@ -75,6 +75,7 @@ defmodule Samly.Helper do
       {:ok, Assertion.from_rec(assertion_rec)}
     else
       {:error, reason} ->
+        Logger.debug("sp source", body_params: inspect(sp))
         Logger.debug("decode_idp_auth_resp error reason", body_params: inspect(reason))
         {:error, reason}
 
