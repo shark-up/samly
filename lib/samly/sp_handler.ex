@@ -34,8 +34,8 @@ defmodule Samly.SPHandler do
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]
     relay_state_input = conn.body_params["RelayState"]
-    # relay_state = if relay_state_input, do: URI.decode_www_form(relay_state_input)
-    relay_state = URI.decode_www_form(relay_state_input)
+    relay_state = if relay_state_input, do: URI.decode_www_form(relay_state_input)
+    # relay_state = URI.decode_www_form(relay_state_input)
     Logger.debug("Relay State", body_params: inspect(relay_state))
 
     {:ok, body, conn} = read_body(conn)
