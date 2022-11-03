@@ -23,6 +23,7 @@ defmodule Samly.RouterUtil do
         else
           %{"idp_id" => idp_id} ->
             idp_id
+
           _ ->
             nil
         end
