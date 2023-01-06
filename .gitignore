@@ -21,3 +21,5 @@ erl_crash.dump
 .sobelow
 /docs/
 /.elixir_ls/
+
+*.DS_Store
