@@ -32,7 +32,8 @@ defmodule Samly.SPHandler do
 
     saml_encoding = conn.body_params["SAMLEncoding"]
     saml_response = conn.body_params["SAMLResponse"]
-    relay_state = conn.body_params["RelayState"] |> URI.decode_www_form()
+    rls = conn.body_params["RelayState"] || Map.get(conn.params, "RelayState")
+    relay_state = URI.decode_www_form(rls)
 
     with {:ok, assertion} <- Helper.decode_idp_auth_resp(sp, saml_encoding, saml_response),
          :ok <- validate_authresp(conn, assertion, relay_state),
