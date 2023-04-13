@@ -64,6 +64,9 @@ defmodule Samly.AuthHandler do
 
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id} ->
+        Logger.debug("[SAMLY AuthHandler] send_signin_req/1")
+        Logger.debug("conn relay_state")
+        Logger.debug(inspect(get_session(conn, "relay_state")))
         conn |> redirect(302, target_url)
 
       _ ->
