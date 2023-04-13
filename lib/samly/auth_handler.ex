@@ -88,6 +88,7 @@ defmodule Samly.AuthHandler do
         |> put_session("idp_id", idp_id)
         |> put_session("target_url", target_url)
         IO.inspect(get_session(conn), label: "conn session")
+        IO.inspect(conn.private |> Map.keys(), label: "conn private")
 
         conn |> send_saml_request(
           idp_signin_url,
