@@ -68,13 +68,15 @@ defmodule Samly.AuthHandler do
 
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id} ->
+        IO.inspect("present", label: "assertion from conn")
         Logger.debug("[SAMLY AuthHandler] send_signin_req/1")
         Logger.debug("conn relay_state")
         Logger.debug(inspect(get_session(conn, "relay_state")))
         conn |> redirect(302, target_url)
 
-      _ ->
-        relay_state = State.gen_id()
+      res ->
+        IO.inspect(res, label: "assertion from conn")
+        relay_state = State.gen_id() |> IO.inspect(label: "genrated relay state")
 
         {idp_signin_url, req_xml_frag} =
           Helper.gen_idp_signin_req(sp, idp_rec, Map.get(idp, :nameid_format))
