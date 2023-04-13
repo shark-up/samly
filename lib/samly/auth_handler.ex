@@ -84,6 +84,7 @@ defmodule Samly.AuthHandler do
         conn = conn
         |> configure_session(renew: true)
         |> put_session("relay_state", relay_state)
+        |> put_private(:relay_state, relay_state)
         |> put_session("idp_id", idp_id)
         |> put_session("target_url", target_url)
         IO.inspect(get_session(conn), label: "conn session")
