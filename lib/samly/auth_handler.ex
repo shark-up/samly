@@ -81,12 +81,14 @@ defmodule Samly.AuthHandler do
         {idp_signin_url, req_xml_frag} =
           Helper.gen_idp_signin_req(sp, idp_rec, Map.get(idp, :nameid_format))
 
-        conn
+        conn = conn
         |> configure_session(renew: true)
         |> put_session("relay_state", relay_state)
         |> put_session("idp_id", idp_id)
         |> put_session("target_url", target_url)
-        |> send_saml_request(
+        IO.inspect(get_session(conn), label: "conn session")
+
+        conn |> send_saml_request(
           idp_signin_url,
           idp.use_redirect_for_req,
           req_xml_frag,
