@@ -61,6 +61,10 @@ defmodule Samly.AuthHandler do
 
     target_url = conn.private[:samly_target_url] || "/"
     assertion_key = get_session(conn, "samly_assertion_key")
+    IO.inspect(idp_id, label: "send_signin_req")
+    IO.inspect(target_url, label: "send_signin_req")
+    IO.inspect(assertion_key, label: "send_signin_req")
+    IO.inspect(get_session(conn, "relay_state"), label: "send_signin_req")
 
     case State.get_assertion(conn, assertion_key) do
       %Assertion{idp_id: ^idp_id} ->
