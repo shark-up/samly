@@ -26,6 +26,7 @@ defmodule Samly.SPHandler do
   end
 
   def consume_signin_response(conn) do
+    conn = fetch_session(conn)
     %IdpData{id: idp_id} = idp = conn.private[:samly_idp]
     %IdpData{pre_session_create_pipeline: pipeline, esaml_sp_rec: sp_rec} = idp
     sp = ensure_sp_uris_set(sp_rec, conn)
