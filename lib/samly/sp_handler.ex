@@ -46,16 +46,29 @@ defmodule Samly.SPHandler do
       nameid = assertion.subject.name
       assertion_key = {idp_id, nameid}
       conn = State.put_assertion(conn, assertion_key, assertion)
+
+      Logger.info("[Samly] conn: #{inspect(conn, limit: :infinity)}")
+
+      Logger.info("[Samly] conn.private: #{conn |> Map.get(:private) |> inspect(limit: :infinity)}")
+
       target_url = auth_target_url(conn, assertion, relay_state)
+
+      Logger.info("[Samly] target_url: #{target_url}")
 
       conn
       |> configure_session(renew: true)
       |> put_session("samly_assertion_key", assertion_key)
       |> redirect(302, target_url)
     else
-      {:halted, conn} -> conn
-      {:error, reason} -> conn |> send_resp(403, "access_denied #{inspect(reason)}")
-      _ -> conn |> send_resp(403, "access_denied")
+      {:halted, conn} ->
+        Logger.error("[Samly] error: halted")
+        conn
+      {:error, reason} ->
+        Logger.error("[Samly] error: #{inspect(reason)}")
+        conn |> send_resp(403, "access_denied #{inspect(reason)}")
+      e ->
+        Logger.error("[Samly] error (access_denied): #{inspect(e)}")
+        conn |> send_resp(403, "access_denied")
     end
 
     # rescue
