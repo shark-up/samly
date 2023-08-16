@@ -30,7 +30,6 @@ defmodule Samly.AuthHandler do
         <%= if target_url do %>
         <input type=\"hidden\" name=\"target_url\" value=\"<%= target_url %>\" />
         <% end %>
-        <input type=\"hidden\" name=\"_csrf_token\" value=\"<%= csrf_token %>\" />
         <noscript><input type=\"submit\" value=\"Submit\" /></noscript>
       </form>
     </body>
@@ -38,15 +37,15 @@ defmodule Samly.AuthHandler do
   """
 
   def initiate_sso_req(conn) do
-    import Plug.CSRFProtection, only: [get_csrf_token: 0]
+    # import Plug.CSRFProtection, only: [get_csrf_token: 0]
 
     target_url = conn.private[:samly_target_url] || "/"
 
     opts = [
       nonce: conn.private[:samly_nonce],
       action: URI.encode(conn.request_path),
-      target_url: URI.encode_www_form(target_url),
-      csrf_token: get_csrf_token()
+      target_url: URI.encode_www_form(target_url)#,
+      # csrf_token: get_csrf_token()
     ]
 
     conn
