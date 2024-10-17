@@ -90,7 +90,12 @@ defmodule Samly.RouterUtil do
   def send_saml_request(conn, idp_url, use_redirect?, signed_xml_payload, relay_state) do
     if use_redirect? do
       url =
-        :esaml_binding.encode_http_redirect(idp_url, signed_xml_payload, :undefined, relay_state)
+        idp_url
+        |> :esaml_binding.encode_http_redirect(signed_xml_payload, :undefined, relay_state)
+        |> String.replace(
+          "SAMLEncoding=urn%3Aoasis%3Anames%3Atc%3ASAML%3A2.0%3Abindings%3AURL-Encoding%3ADEFLATE&",
+          ""
+        )
 
       conn |> redirect(302, url)
     else
